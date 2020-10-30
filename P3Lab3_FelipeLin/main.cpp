@@ -28,12 +28,13 @@ void printMatrix(int**, int);
 
 int Determinante(int**&, int);
 
-int Cofactor(int**,int,int);
+int Cofactor(int**, int, int, int);
 
-int Adjunta(int**);
+int** Adjunta(int**, int);
 
+int** submatriz(int**&, int, int, int);
 
-
+int par_impar(int, int);
 
 int main(int argc, char** argv) {
 
@@ -47,6 +48,8 @@ int main(int argc, char** argv) {
             {
                 int size;
                 int** Matrix = NULL;
+                int** Matrix_Adjunta = NULL;
+                int** Matrix_Inversa = NULL;
 
                 cout << "Elija el tamaño de su matriz: " << endl;
                 cin >> size;
@@ -56,6 +59,15 @@ int main(int argc, char** argv) {
                 Matrix = LlenarMatriz(Matrix, size);
 
                 printMatrix(Matrix, size);
+
+                Matrix_Adjunta = InicializarMatriz(size);
+
+                Matrix_Adjunta = Adjunta(Matrix,size);
+
+                printMatrix(Matrix_Adjunta, size);
+                
+                liberarMatriz(Matrix, size);
+                liberarMatriz(Matrix_Adjunta, size);
 
                 break;
             }
@@ -90,7 +102,7 @@ int** LlenarMatriz(int** matriz, int size) {
     if (size > 0) {
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
-                matriz[i][j] = rand() % 20 - 9;
+                matriz[i][j] = rand() % 19 - 9;
             }
         }
     }
@@ -127,9 +139,70 @@ void printMatrix(int** matriz, int size) {
     }
 }
 
-int Determinante(int**& matriz, int size) {
-    
-  
+int** Adjunta(int** matriz, int size) {
+    int** matrizAdjunta = InicializarMatriz(size);
+    for (int i = 0; i < size; i++) {
+        for (int j = 0; j < size; j++) {
+            cout << "SEXO" << endl;
+            matrizAdjunta[i][j] = Cofactor(matriz, i, j, size);
+        }
+    }
+
+    return matrizAdjunta;
+}
+
+int Cofactor(int** MatrizAdjunta, int fila, int columna, int size) {
+    int calculo;
+    int** submatriz_a = InicializarMatriz(size);
+    submatriz_a = submatriz(MatrizAdjunta, fila, columna, size);
+    calculo = par_impar(fila, columna) * Determinante(submatriz_a, size);
+
+    return calculo;
+
+}
+
+int** submatriz(int**& MatrizCofactor, int fila, int columna, int size) {
+    int** matriz_x = InicializarMatriz(size);
+
+    int x = 0, y = 0,n=size-1;
+    for (int i = 0; i < size; i++) {
+        for (int j = 0; j < size; j++) {
+            if (i != fila && j != columna) {
+                matriz_x[x][y] = MatrizCofactor[i][j];
+                y++;
+                if (y >= n) {
+                    x++;
+                    y = 0;
+                }
+            }
+        }
+    }
+
+    return matriz_x;
+
+}
+
+int par_impar(int i, int j) {
+
+    if (i + j % 2 == 0) {
+        return 1;
+    } else {
+        return -1;
+    }
+}
+
+int Determinante(int**& matrix, int size) {
+    int valor;
+    if (size == 2) {
+        valor = matrix[0][0] * matrix[1][1] + matrix[0][1] * matrix[1][0];
+    } else {
+        for (int i = 0; i < size; i++) {
+            valor += matrix[0][i] * Cofactor(matrix, 0, i, size);
+        }
+    }
+
+    return valor;
+
 }
 
 
