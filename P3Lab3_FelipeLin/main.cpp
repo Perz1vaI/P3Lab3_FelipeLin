@@ -172,7 +172,7 @@ void printMatrix(int** matriz, int size) {
             if (matriz[i] != NULL) {
                 cout << "[";
                 for (int j = 0; j < size; j++) {
-                    cout << setw(3) << matriz[i][j] << " ";
+                    cout << setw(4) << matriz[i][j] << " ";
                 }
                 cout << "]" << endl;
             }
@@ -203,7 +203,7 @@ void printMatrix_double(double** matriz, int size) {
             if (matriz[i] != NULL) {
                 cout << "[";
                 for (int j = 0; j < size; j++) {
-                    cout << setw(3) << matriz[i][j] << " ";
+                    cout << setw(12) << matriz[i][j] << " ";
                 }
                 cout << "]" << endl;
             }
@@ -298,7 +298,7 @@ double** Inversa(int**& matriz, int determinante, int size) {
 
     for (int i = 0; i < size; i++) {
         for (int j = 0; j < size; j++) {
-            Matriz_Inversa[i][j] = (1 / determinante) * matriz[i][j];
+            Matriz_Inversa[i][j] = (1 / (double)determinante) * (double)matriz[i][j];
         }
     }
 
