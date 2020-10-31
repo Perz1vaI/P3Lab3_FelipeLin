@@ -22,9 +22,15 @@ int** LlenarMatriz(int**, int);
 
 int** InicializarMatriz(int);
 
+double** InicializarMatriz_double(int);
+
 void liberarMatriz(int**&, int);
 
 void printMatrix(int**, int);
+
+void liberarMatriz_double(double**&, int);
+
+void printMatrix_double(double**, int);
 
 int Determinante(int**&, int);
 
@@ -38,7 +44,7 @@ int par_impar(int, int);
 
 int** Transpuesta(int**&, int);
 
-int** Inversa(int**&, int, int);
+double** Inversa(int**&, int, int);
 
 int main(int argc, char** argv) {
 
@@ -54,7 +60,7 @@ int main(int argc, char** argv) {
                 int** Matrix = NULL;
                 int** Matrix_Adjunta = NULL;
                 int** Matrix_Transpuesta = NULL;
-                int** Matrix_Inversa = NULL;
+                double** Matrix_Inversa = NULL;
 
                 cout << "Elija el tamaño de su matriz: " << endl;
                 cin >> size;
@@ -79,17 +85,19 @@ int main(int argc, char** argv) {
 
                 cout << "La determinante de la matriz original es: " << determinante_Matriz << endl;
 
-                Matrix_Inversa = InicializarMatriz(size);
+                Matrix_Inversa = InicializarMatriz_double(size);
 
                 Matrix_Inversa = Inversa(Matrix_Transpuesta, determinante_Matriz, size);
+                cout << "La matriz inversa:" << endl;
 
-                printMatrix(Matrix_Inversa, size);
+
+                printMatrix_double(Matrix_Inversa, size);
 
 
                 liberarMatriz(Matrix, size);
                 liberarMatriz(Matrix_Adjunta, size);
                 liberarMatriz(Matrix_Transpuesta, size);
-                liberarMatriz(Matrix_Inversa, size);
+                liberarMatriz_double(Matrix_Inversa, size);
 
 
 
@@ -121,16 +129,24 @@ int** InicializarMatriz(int size) {
     }
     return NULL;
 }
+double** InicializarMatriz_double(int size) {
+    if (size > 0) {
+        double** intArray = new double*[size];
+        for (int i = 0; i < size; i++) {
+            intArray[i] = new double[size];
+        }
+        return intArray;
+    }
+    return NULL;
+}
 
 int** LlenarMatriz(int** matriz, int size) {
     if (size > 0) {
         int x;
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
-                //matriz[i][j] = rand() % 19 - 9;
-                cout << "ingrese" << endl;
-                cin >> x;
-                matriz[i][j] = x;
+                matriz[i][j] = rand() % 19 - 9;
+               
             }
         }
     }
@@ -166,6 +182,38 @@ void printMatrix(int** matriz, int size) {
         cout << endl;
     }
 }
+
+void liberarMatriz_double(double**& matriz, int size) {
+    if (matriz != NULL && size > 0) {
+        for (int i = 0; i < size; i++) {
+            if (matriz[i] != NULL) {
+                delete[] matriz[i];
+                matriz[i] = NULL;
+            }
+        }
+        delete[] matriz;
+        matriz = NULL;
+    }
+}
+
+void printMatrix_double(double** matriz, int size) {
+    if (size > 0 && matriz != NULL) {
+        for (int i = 0; i < size; i++) {
+            if (matriz[i] != NULL) {
+                cout << "[";
+                for (int j = 0; j < size; j++) {
+                    cout << setw(3) << matriz[i][j] << " ";
+                }
+                cout << "]" << endl;
+            }
+
+
+
+        }
+        cout << endl;
+    }
+}
+
 
 int** Adjunta(int** matriz, int size) {
     int** matrizAdjunta = InicializarMatriz(size);
@@ -249,8 +297,8 @@ int** Transpuesta(int**& matriz, int size) {
     return Matriz_trans;
 }
 
-int** Inversa(int**& matriz, int determinante, int size) {
-    int** Matriz_Inversa = InicializarMatriz(size);
+double** Inversa(int**& matriz, int determinante, int size) {
+    double** Matriz_Inversa = InicializarMatriz_double(size);
 
     for (int i = 0; i < size; i++) {
         for (int j = 0; j < size; j++) {
