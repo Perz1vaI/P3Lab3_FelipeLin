@@ -36,6 +36,10 @@ int** submatriz(int**&, int, int, int);
 
 int par_impar(int, int);
 
+int** Transpuesta(int**&, int);
+
+int** Inversa(int**&, int, int);
+
 int main(int argc, char** argv) {
 
     int menu;
@@ -46,9 +50,10 @@ int main(int argc, char** argv) {
         switch (menu) {
             case 1:
             {
-                int size;
+                int size, determinante_Matriz;
                 int** Matrix = NULL;
                 int** Matrix_Adjunta = NULL;
+                int** Matrix_Transpuesta = NULL;
                 int** Matrix_Inversa = NULL;
 
                 cout << "Elija el tamaño de su matriz: " << endl;
@@ -62,12 +67,31 @@ int main(int argc, char** argv) {
 
                 Matrix_Adjunta = InicializarMatriz(size);
 
-                Matrix_Adjunta = Adjunta(Matrix,size);
+                Matrix_Adjunta = Adjunta(Matrix, size);
 
-                printMatrix(Matrix_Adjunta, size);
-                
+                Matrix_Transpuesta = InicializarMatriz(size);
+
+                Matrix_Transpuesta = Transpuesta(Matrix_Adjunta, size);
+
+                determinante_Matriz = Determinante(Matrix, size);
+                cout << "La matriz adjunta:" << endl;
+                printMatrix(Matrix_Transpuesta, size);
+
+                cout << "La determinante de la matriz original es: " << determinante_Matriz << endl;
+
+                Matrix_Inversa = InicializarMatriz(size);
+
+                Matrix_Inversa = Inversa(Matrix_Transpuesta, determinante_Matriz, size);
+
+                printMatrix(Matrix_Inversa, size);
+
+
                 liberarMatriz(Matrix, size);
                 liberarMatriz(Matrix_Adjunta, size);
+                liberarMatriz(Matrix_Transpuesta, size);
+                liberarMatriz(Matrix_Inversa, size);
+
+
 
                 break;
             }
@@ -100,9 +124,13 @@ int** InicializarMatriz(int size) {
 
 int** LlenarMatriz(int** matriz, int size) {
     if (size > 0) {
+        int x;
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
-                matriz[i][j] = rand() % 19 - 9;
+                //matriz[i][j] = rand() % 19 - 9;
+                cout << "ingrese" << endl;
+                cin >> x;
+                matriz[i][j] = x;
             }
         }
     }
@@ -127,7 +155,7 @@ void printMatrix(int** matriz, int size) {
             if (matriz[i] != NULL) {
                 cout << "[";
                 for (int j = 0; j < size; j++) {
-                    cout << setw(2) << matriz[i][j] << " ";
+                    cout << setw(3) << matriz[i][j] << " ";
                 }
                 cout << "]" << endl;
             }
@@ -148,6 +176,8 @@ int** Adjunta(int** matriz, int size) {
         }
     }
 
+
+
     return matrizAdjunta;
 }
 
@@ -155,8 +185,8 @@ int Cofactor(int** MatrizAdjunta, int fila, int columna, int size) {
     int calculo;
     int** submatriz_a = InicializarMatriz(size);
     submatriz_a = submatriz(MatrizAdjunta, fila, columna, size);
-    calculo = par_impar(fila, columna) * Determinante(submatriz_a, size);
-
+    calculo = par_impar(fila, columna) * Determinante(submatriz_a, size - 1);
+    cout << "SEXO 2" << endl;
     return calculo;
 
 }
@@ -164,7 +194,7 @@ int Cofactor(int** MatrizAdjunta, int fila, int columna, int size) {
 int** submatriz(int**& MatrizCofactor, int fila, int columna, int size) {
     int** matriz_x = InicializarMatriz(size);
 
-    int x = 0, y = 0,n=size-1;
+    int x = 0, y = 0, n = size - 1;
     for (int i = 0; i < size; i++) {
         for (int j = 0; j < size; j++) {
             if (i != fila && j != columna) {
@@ -184,7 +214,7 @@ int** submatriz(int**& MatrizCofactor, int fila, int columna, int size) {
 
 int par_impar(int i, int j) {
 
-    if (i + j % 2 == 0) {
+    if ((i + j) % 2 == 0) {
         return 1;
     } else {
         return -1;
@@ -192,12 +222,15 @@ int par_impar(int i, int j) {
 }
 
 int Determinante(int**& matrix, int size) {
-    int valor;
+    int valor = 0;
     if (size == 2) {
         valor = matrix[0][0] * matrix[1][1] + matrix[0][1] * matrix[1][0];
+        cout << "SEXO 4" << endl;
     } else {
         for (int i = 0; i < size; i++) {
+            cout << "SEXO 3" << endl;
             valor += matrix[0][i] * Cofactor(matrix, 0, i, size);
+            cout << "SEXO 3.5" << endl;
         }
     }
 
@@ -205,7 +238,28 @@ int Determinante(int**& matrix, int size) {
 
 }
 
+int** Transpuesta(int**& matriz, int size) {
+    int** Matriz_trans = InicializarMatriz(size);
+    for (int i = 0; i < size; i++) {
+        for (int j = 0; j < size; j++) {
+            Matriz_trans[j][i] = matriz[i][j];
+        }
+    }
 
+    return Matriz_trans;
+}
+
+int** Inversa(int**& matriz, int determinante, int size) {
+    int** Matriz_Inversa = InicializarMatriz(size);
+
+    for (int i = 0; i < size; i++) {
+        for (int j = 0; j < size; j++) {
+            Matriz_Inversa[i][j] = (1 / determinante) * matriz[i][j];
+        }
+    }
+
+    return Matriz_Inversa;
+}
 
 
 
