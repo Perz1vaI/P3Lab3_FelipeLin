@@ -68,7 +68,7 @@ int main(int argc, char** argv) {
                 Matrix = InicializarMatriz(size);
 
                 Matrix = LlenarMatriz(Matrix, size);
-
+                cout << "matriz original: " << endl;
                 printMatrix(Matrix, size);
 
                 Matrix_Adjunta = InicializarMatriz(size);
@@ -86,6 +86,7 @@ int main(int argc, char** argv) {
                 cout << "La determinante de la matriz original es: " << determinante_Matriz << endl;
 
                 Matrix_Inversa = InicializarMatriz_double(size);
+                cout << endl;
 
                 Matrix_Inversa = Inversa(Matrix_Transpuesta, determinante_Matriz, size);
                 cout << "La matriz inversa:" << endl;
