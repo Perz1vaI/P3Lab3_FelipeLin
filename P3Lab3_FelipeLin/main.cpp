@@ -219,7 +219,6 @@ int** Adjunta(int** matriz, int size) {
     int** matrizAdjunta = InicializarMatriz(size);
     for (int i = 0; i < size; i++) {
         for (int j = 0; j < size; j++) {
-            cout << "SEXO" << endl;
             matrizAdjunta[i][j] = Cofactor(matriz, i, j, size);
         }
     }
@@ -234,7 +233,6 @@ int Cofactor(int** MatrizAdjunta, int fila, int columna, int size) {
     int** submatriz_a = InicializarMatriz(size);
     submatriz_a = submatriz(MatrizAdjunta, fila, columna, size);
     calculo = par_impar(fila, columna) * Determinante(submatriz_a, size - 1);
-    cout << "SEXO 2" << endl;
     return calculo;
 
 }
@@ -273,12 +271,9 @@ int Determinante(int**& matrix, int size) {
     int valor = 0;
     if (size == 2) {
         valor = matrix[0][0] * matrix[1][1] + matrix[0][1] * matrix[1][0];
-        cout << "SEXO 4" << endl;
     } else {
         for (int i = 0; i < size; i++) {
-            cout << "SEXO 3" << endl;
             valor += matrix[0][i] * Cofactor(matrix, 0, i, size);
-            cout << "SEXO 3.5" << endl;
         }
     }
 
